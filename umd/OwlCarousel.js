@@ -3409,7 +3409,8 @@
 
     })(window.Zepto || window.jQuery, window, document);
 
-    var $ = window.jQuery;
+    var isBrowser = typeof window !== 'undefined';
+    var $ = isBrowser ? window.jQuery : null;
     var ReactOwlCarousel = /** @class */ (function (_super) {
         __extends(ReactOwlCarousel, _super);
         function ReactOwlCarousel(props) {
@@ -3423,19 +3424,27 @@
             return _this;
         }
         ReactOwlCarousel.prototype.componentDidMount = function () {
+            if (!$)
+                return;
             this.$ele = $(this.container);
             this.create();
         };
         ReactOwlCarousel.prototype.UNSAFE_componentWillReceiveProps = function () {
+            if (!$)
+                return;
             this.destory();
         };
         ReactOwlCarousel.prototype.componentDidUpdate = function () {
+            if (!$)
+                return;
             var _a = filterOptions(this.props), options = _a[0], propsWithoutOptions = _a[1];
             this.options = options;
             this.propsWithoutOptions = propsWithoutOptions;
             this.create();
         };
         ReactOwlCarousel.prototype.next = function (speed) {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             if (typeof speed === 'number') {
@@ -3446,6 +3455,8 @@
             }
         };
         ReactOwlCarousel.prototype.prev = function (speed) {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             if (typeof speed === 'number') {
@@ -3456,6 +3467,8 @@
             }
         };
         ReactOwlCarousel.prototype.to = function (position, speed) {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             if (typeof position === 'number' && typeof speed === 'number') {
@@ -3466,16 +3479,22 @@
             }
         };
         ReactOwlCarousel.prototype.create = function (options) {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             this.$ele.owlCarousel(options || this.options);
         };
         ReactOwlCarousel.prototype.destory = function () {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             this.$ele.trigger('destroy.owl.carousel');
         };
         ReactOwlCarousel.prototype.play = function (timeout, speed) {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             if (typeof timeout === 'number' && typeof speed === 'number') {
@@ -3486,6 +3505,8 @@
             }
         };
         ReactOwlCarousel.prototype.stop = function () {
+            if (!$)
+                return;
             if (!this.$ele)
                 throw new Error('OwlCarousel is not created');
             this.$ele.trigger('stop.owl.autoplay');

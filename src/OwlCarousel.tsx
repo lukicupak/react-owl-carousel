@@ -4,7 +4,9 @@ import { Options } from './options';
 
 import 'owl.carousel';
 
-const $: typeof jquery = (window as any).jQuery;
+const isBrowser = typeof window !== 'undefined';
+
+let $: typeof jquery | null = isBrowser ? (window as any).jQuery : null;
 
 export type ComponentProps = Readonly<
     AllHTMLAttributes<HTMLDivElement> & { children: ReactNode }
@@ -25,15 +27,21 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public componentDidMount() {
+        if (!$) return;
+
         this.$ele = $(this.container!);
         this.create();
     }
 
     public UNSAFE_componentWillReceiveProps() {
+        if (!$) return;
+
         this.destory();
     }
 
     public componentDidUpdate() {
+        if (!$) return;
+
         const [options, propsWithoutOptions] = filterOptions(this.props);
         this.options = options;
         this.propsWithoutOptions = propsWithoutOptions;
@@ -42,6 +50,8 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public next(speed: number | number[]) {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         if (typeof speed === 'number') {
@@ -52,6 +62,8 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public prev(speed: number | number[]) {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         if (typeof speed === 'number') {
@@ -62,6 +74,8 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public to(position: number, speed: number) {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         if (typeof position === 'number' && typeof speed === 'number') {
@@ -72,18 +86,24 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public create(options?: Options) {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         this.$ele.owlCarousel(options || this.options);
     }
 
     public destory() {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         this.$ele.trigger('destroy.owl.carousel');
     }
 
     public play(timeout: number, speed: number) {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         if (typeof timeout === 'number' && typeof speed === 'number') {
@@ -94,6 +114,8 @@ export default class ReactOwlCarousel extends Component<OwlCarouselProps> {
     }
 
     public stop() {
+        if (!$) return;
+
         if (!this.$ele) throw new Error('OwlCarousel is not created');
 
         this.$ele.trigger('stop.owl.autoplay');
